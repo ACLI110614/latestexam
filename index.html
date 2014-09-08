@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Exam By alfie chiong</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            .floatright{
+                float:right;
+            }
+             .searchcon{
+            margin:10px auto;
+        }
+        
+        .movcon{
+            width:200px;
+            height:100px;
+            margin:10px;
+            padding:2px;
+            float:left;
+            list-style-type: none;
+            border:solid thin #ccc;
+        }
+        
+        .movethumb{
+            float:left;
+            margin-left:5px;
+            height:72px;
+           
+        }
+        .movtext{
+            float:left;
+            margin-left:5px;
+            width:120px;
+            font-size: 12px;
+           
+        }
+        
+            .movimg{
+            float:left;
+            margin-left:5px;
+            width:60px;
+            margin-top: 15px;
+           
+        }
+        </style>
+    </head>
+    
+<body>
+
+    <div class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li id="red" class="active"><a href="javascript:void(0)">Red</a></li>
+            <li id="green"><a href="javascript:void(0)">Green</a></li>
+            <li id="blue"><a href="javascript:void(0)">Blue</a></li>
+            <li id="yellow"><a href="javascript:void(0)">Yellow</a></li>
+          </ul>
+           <div class="floatright searchcon"> 
+               <input type="text" id="searchContent"><button id="searchme">Search</button>
+           </div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container ">
+
+      <div class="starter-template">
+        <h1>Exam Rotten Api</h1>
+      </div>
+          <div class="container"  id="content"><ul></ul></div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<script src="jquery-1.9.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+  
+<script>
+    function getData(keyword){
+      $.ajax({
+  type: "POST",
+  url: "getdata.php",
+  dataType:"JSON",
+  data:{
+      search:keyword
+  },
+  
+  success:function(data){
+      $("#content ul").html("");
+      console.log(JSON.stringify(data));
+      $.each(data.movies,function(){
+          $("#content ul").append("<li class='movcon'>\n\
+            \n\<div class='movimg'><img class='movethumb' src='"+this.posters.profile+"' alt='"+this.title+"'></div>"+
+            "<div class='movtext'><br>Title:"+this.title+
+            "<br>Year:"+this.year+
+            "<br>runtime:"+this.runtime+
+            
+           "</div></li>");
+      });
+    }
+});  
+    };
+   $(document).ready(function(){
+       $("#searchme").click(function(){
+        getData($("#searchContent").val());
+       });
+       
+        getData("red");
+   });
+ 
+ $(document).on('click','.navbar-nav > li',function(){
+        $.each($(".navbar-nav > li"),function(){
+            $(this).removeClass('active');
+        });
+        
+        $(this).addClass('active');
+        //alert($(this).attr('id'));
+        getData($(this).attr('id'));
+ });
+</script>
+</body>
+    
+</html>
